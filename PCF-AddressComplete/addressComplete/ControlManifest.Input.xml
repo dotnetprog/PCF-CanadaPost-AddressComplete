@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="Canadapost" constructor="addressComplete" version="1.1.0" display-name-key="addressComplete" description-key="addressComplete description" control-type="standard">
+    <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
+    <property name="api_key" display-name-key="API Key" description-key="Your Canada post API Key." of-type="SingleLine.Text" usage="input" required="true" />
+    <property name="country_code" display-name-key="Country Code" description-key="The default country code you want to search against (ex:CA/US). (Default: CA)" of-type="SingleLine.Text" usage="input" required="true" />
+    <property name="option_allowcountry" display-name-key="Allow user to change country" description-key="If the user can change the country for the autocomplete" of-type="SingleLine.Text" usage="input" />
+    <property name="option_showlogo" display-name-key="Enables canadapost logo" description-key="Shows the canadapost logo" of-type="SingleLine.Text" usage="input" />
+    <property name="address_line_1" display-name-key="Line 1" description-key="The address line 1." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="address_line_2" display-name-key="Line 2" description-key="The address line 2." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="province_or_state" display-name-key="Province or State" description-key="The address province or state" of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="city" display-name-key="City" description-key="The address city." of-type="SingleLine.Text" usage="bound" required="false" />
+    
+    <property name="postcode" display-name-key="Post Code" description-key="The address post code." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="country" display-name-key="Country" description-key="The address country." of-type="SingleLine.Text" usage="bound" required="false" />
+    
+    <!-- 
+      Property node's of-type attribute can be of-type-group attribute. 
+      Example:
+      <type-group name="numbers">
+        <type>Whole.None</type>
+        <type>Currency</type>
+        <type>FP</type>
+        <type>Decimal</type>
+      </type-group>
+      <property name="sampleProperty" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type-group="numbers" usage="bound" required="true" />
+    -->
+    <resources>
+      <code path="index.ts" order="1"/>
+      <css path="css/canadapost.css" order="1" />
+      <!-- UNCOMMENT TO ADD MORE RESOURCES
+      <css path="css/addressComplete.css" order="1" />
+      <resx path="strings/addressComplete.1033.resx" version="1.0.0" />
+      -->
+    </resources>
+    <!-- UNCOMMENT TO ENABLE THE SPECIFIED API
+    <feature-usage>
+      <uses-feature name="Device.captureAudio" required="true" />
+      <uses-feature name="Device.captureImage" required="true" />
+      <uses-feature name="Device.captureVideo" required="true" />
+      <uses-feature name="Device.getBarcodeValue" required="true" />
+      <uses-feature name="Device.getCurrentPosition" required="true" />
+      <uses-feature name="Device.pickFile" required="true" />
+      <uses-feature name="Utility" required="true" />
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+    -->
+  </control>
+</manifest>
