@@ -95,7 +95,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 			key: this._context.parameters.api_key.raw,
 			culture: this.default_culture == "true",
 			bar:{
-				showCountry:this._options.show_country,
+				showCountry:this._options.show_country == "true",
 				showLogo:this._options.show_logo == "true",
 			} 
 		};  
