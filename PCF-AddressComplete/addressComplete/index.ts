@@ -93,7 +93,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 		],  
 		options = {   
 			key: this._context.parameters.api_key.raw,
-			culture: this.default_culture == "true",
+			culture: this.default_culture,
 			bar:{
 				showCountry:this._options.show_country == "true",
 				showLogo:this._options.show_logo == "true",
