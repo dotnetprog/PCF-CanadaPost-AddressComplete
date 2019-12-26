@@ -23,7 +23,7 @@ Simply download the managed solution and import it into your CDS environment.
 *   **API Key** - api key from your canada post account. 
 *   **Country code** - Default country code to use to retrieve address suggestions as user types
     
-*   **Allow user to change country** - type "true" to enables this features otherwise user cannot change the country.
+*   **Allow user to change country** - type "true" to enable this feature otherwise user cannot change the country.
 *   **Enables canadapost logo** if set to "true" , It displays the address complete logo on the suggestion dropdown.
 ![Alt text](/Screenshots/config_sample.png?raw=true "config")
 ![Alt text](/Screenshots/config_sample2.png?raw=true "config 2")
