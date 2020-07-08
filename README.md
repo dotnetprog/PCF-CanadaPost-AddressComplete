@@ -21,6 +21,7 @@ Simply download the managed solution and import it into your CDS environment.
 ### Configuration options
 
 *   **API Key** - api key from your canada post account. 
+*   **useProvinceCode** - fills the province or state field with code instead of name. 
 *   **Country code** - Default country code to use to retrieve address suggestions as user types
     
 *   **Allow user to change country** - type "true" to enable this feature otherwise user cannot change the country.
