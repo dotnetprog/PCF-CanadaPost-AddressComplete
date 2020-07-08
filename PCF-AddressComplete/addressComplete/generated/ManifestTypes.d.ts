@@ -5,6 +5,7 @@
 // Define IInputs and IOutputs Type. They should match with ControlManifest.
 export interface IInputs {
     api_key: ComponentFramework.PropertyTypes.StringProperty;
+    useProvinceCode: ComponentFramework.PropertyTypes.EnumProperty<"Yes" | "No">;
     country_code: ComponentFramework.PropertyTypes.StringProperty;
     option_allowcountry: ComponentFramework.PropertyTypes.StringProperty;
     option_showlogo: ComponentFramework.PropertyTypes.StringProperty;
