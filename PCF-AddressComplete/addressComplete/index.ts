@@ -23,7 +23,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 	// Canada post params
 	private _country_code: string | null;
 	private _options:any;
-
+    private useProvinceCode:boolean = false;
 	//private _options: object;
 
 	// Canada post fields
@@ -66,7 +66,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 			show_country : context.parameters.option_allowcountry.raw,
 			show_logo: context.parameters.option_showlogo.raw
 		};
-		
+		this.useProvinceCode = this._context.parameters.useProvinceCode?.raw === "Yes";
 		
 		// Initialize the container
 		this.initContainter();
@@ -110,7 +110,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 			this._address_line_1 = address.Line1;
 			this._address_line_2 = address.Line2;
 			this._city = address.City;
-			this._provincestate = address.ProvinceName;
+			this._provincestate = this.useProvinceCode ? address.ProvinceCode : address.ProvinceName;
 			this._postcode = address.PostalCode;
 			this._country = address.CountryName;
 			this._notifyOutputChanged();

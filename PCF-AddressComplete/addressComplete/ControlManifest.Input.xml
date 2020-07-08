@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="Canadapost" constructor="addressComplete" version="1.1.0" display-name-key="addressComplete" description-key="addressComplete description" control-type="standard">
+  <control namespace="Canadapost" constructor="addressComplete" version="1.2.0" display-name-key="addressComplete" description-key="addressComplete description" control-type="standard">
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="api_key" display-name-key="API Key" description-key="Your Canada post API Key." of-type="SingleLine.Text" usage="input" required="true" />
+     <property name="useProvinceCode" display-name-key="use Province Code?" description-key="fills the province/state field with code instead of name" usage="input" of-type="Enum" required="false">
+      <value name="Yes" display-name-key="Yes" description-key="Yes">Yes</value>
+      <value name="No" display-name-key="No" description-key="No" default="true">No</value>
+    </property>
     <property name="country_code" display-name-key="Country Code" description-key="The default country code you want to search against (ex:CA/US). (Default: CA)" of-type="SingleLine.Text" usage="input" required="true" />
     <property name="option_allowcountry" display-name-key="Allow user to change country" description-key="If the user can change the country for the autocomplete" of-type="SingleLine.Text" usage="input" />
     <property name="option_showlogo" display-name-key="Enables canadapost logo" description-key="Shows the canadapost logo" of-type="SingleLine.Text" usage="input" />
