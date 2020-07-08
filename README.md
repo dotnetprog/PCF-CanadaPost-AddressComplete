@@ -8,8 +8,8 @@ The addresses are retrieved from canada post api ,therefore you would need an ap
 here is an example:
 ![Alt text](/Screenshots/demo.png?raw=true "demo")
 ### Important!
-For some reasons, you cannot bind address composite fields such as address1_country or address1_stateorprovinve 
-from contact and account entity but may be used directly inside address entity or any custom text fields will work.
+Now, you can bind address composite fields such as address1_country or address1_stateorprovinve 
+
 
 In the demo above, it has been used on custom text fields.
 
