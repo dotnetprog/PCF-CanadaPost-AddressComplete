@@ -133,6 +133,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 		this._inputElement = document.createElement("input");
 		this._inputElement.setAttribute("id", this.input_id);
 		this._inputElement.setAttribute("type", "text");
+		this._inputElement.style.width ="97%";
 		this._inputElement.value = this._address_line_1;
 		this._container.appendChild(this._inputElement);
 	}
