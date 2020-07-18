@@ -71,7 +71,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 		// Initialize the container
 		this.initContainter();
 		container = this._container;
-
+		
 		// Country code
 		if (this._context.parameters.country_code.raw != null && this._context.parameters.country_code.raw != "")
 			this._country_code = this._context.parameters.country_code.raw;
@@ -133,8 +133,25 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 		this._inputElement = document.createElement("input");
 		this._inputElement.setAttribute("id", this.input_id);
 		this._inputElement.setAttribute("type", "text");
-		this._inputElement.style.width ="97%";
-		this._inputElement.value = this._address_line_1;
+		this._inputElement.className = "fdnTextbox";
+		this._inputElement.value = this._address_line_1 || "---" ;
+		this._inputElement.addEventListener('change',(e) => {
+			
+			this._address_line_1 = this._inputElement.value;
+			this._notifyOutputChanged();
+		});
+		this._inputElement.addEventListener('focus',(e) => {  
+			if(this._inputElement.value === '---')
+			{
+				this._inputElement.value = "";
+			}
+		});
+		this._inputElement.addEventListener('blur',(e) => {  
+			if(!this._inputElement.value)
+			{
+				this._inputElement.value = "---";
+			}
+		});
 		this._container.appendChild(this._inputElement);
 	}
 	private Guid(){
@@ -146,6 +163,8 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 	 */
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
+		this._address_line_1 = this._context.parameters.address_line_1.raw != null ? this._context.parameters.address_line_1.raw : "";
+		this._inputElement.value = this._address_line_1 || "---" ;
 		// Add code to update control view
 	}
 
@@ -158,7 +177,7 @@ export class addressComplete implements ComponentFramework.StandardControl<IInpu
 		var output: { [k: string]: any } = {};
 
 		if (this._context.parameters.address_line_1.type != null)
-			output.address_line_1 = this._address_line_1;
+			output.address_line_1 = this._address_line_1 === '---' ? "":this._address_line_1;
 
 		if (this._context.parameters.address_line_2.type != null)
 			output.address_line_2 = this._address_line_2;
