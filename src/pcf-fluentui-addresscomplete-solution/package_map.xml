@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Mapping>  
+    <!-- you have to rename broadcast-pcf/appmodulepicker/out/controls/AppModulePicker/bundle.js with bbundle.js -->   
+    <!-- and delete Controls/fdn_Broadcast.AppModulePicker/bundle.js for it to work properly -->
+    <FileToPath map="Controls/fdn_fdn.addresscomplete/*.*" to="../../pcf-fluentui-addresscomplete/out/controls/addresscomplete/**" />   
+</Mapping>

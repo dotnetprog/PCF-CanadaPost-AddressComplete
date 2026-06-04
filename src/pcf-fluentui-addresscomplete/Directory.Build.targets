@@ -1,0 +1,23 @@
+<!--
+  Override CleanUpIntermediateFiles to use ContinueOnError="WarnAndContinue".
+
+  This override runs AFTER the SDK target (Directory.Build.targets is imported last)
+  and replaces the behavior with ContinueOnError so the build does not abort.
+
+  RemoveDir with ContinueOnError="WarnAndContinue" attempts the delete and writes
+  a warning on failure, but does not fail the build. Any locked Metadata dirs will
+  remain on disk until the next clean build, which has no functional impact.
+-->
+<Project>
+  <Target Name="CleanUpIntermediateFiles" AfterTargets="PowerAppsPackage">
+    <RemoveDir
+      Directories="$(SolutionPackagerMetadataWorkingDirectory)"
+      Condition="Exists('$(SolutionPackagerMetadataWorkingDirectory)')"
+      ContinueOnError="WarnAndContinue" />
+    <RemoveDir
+      Directories="$(SolutionPackagerLocalizationWorkingDirectory)"
+      Condition="Exists('$(SolutionPackagerLocalizationWorkingDirectory)')"
+      ContinueOnError="WarnAndContinue" />
+    <Message Importance="High" Text="Completed intermediate files clean up." />
+  </Target>
+</Project>
