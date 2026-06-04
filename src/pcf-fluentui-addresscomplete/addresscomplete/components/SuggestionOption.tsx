@@ -2,6 +2,7 @@ import * as React from 'react'
 import { makeStyles } from '@fluentui/react-components'
 import { HomeFilled } from '@fluentui/react-icons/svg/home'
 import { BuildingFilled } from '@fluentui/react-icons/svg/building'
+import { ChevronRightRegular } from '@fluentui/react-icons/svg/chevron-right'
 import { addressSuggestionData } from '../model/addressSuggestionData'
 
 const useStyles = makeStyles({
@@ -86,6 +87,9 @@ export const SuggestionOption: React.FC<ISuggestionOptionProps> = ({
             {highlightText(item.Text, item.Highlight)}
             {item.Description && (
                 <small className={styles.description}>{item.Description}</small>
+            )}
+            {item.Next === 'Find' && (
+                <ChevronRightRegular style={{ verticalAlign: 'middle', float: 'right' }} />
             )}
         </div>
     )

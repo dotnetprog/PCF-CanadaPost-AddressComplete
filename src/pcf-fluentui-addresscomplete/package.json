@@ -4,6 +4,7 @@
     "description": "Project containing your PowerApps Component Framework (PCF) control.",
     "scripts": {
         "build": "pcf-scripts build",
+        "dist": "pcf-scripts build --buildMode production",
         "clean": "pcf-scripts clean",
         "lint": "pcf-scripts lint",
         "lint:fix": "pcf-scripts lint fix",
