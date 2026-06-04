@@ -7,12 +7,13 @@
       <LocalizedName description="Canada Post - Address Complete" languagecode="1036" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.0</Version>
+    <Version>1.0.1.1</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>FDNTechsolutions</UniqueName>
       <LocalizedNames>
         <LocalizedName description="FDN - Techsolutions" languagecode="1033" />
+        <LocalizedName description="FDN - Techsolutions" languagecode="1036" />
       </LocalizedNames>
       <Descriptions />
       <EMailAddress>fdnadeau@techsolutionsfdn.com</EMailAddress>

@@ -1,7 +1,7 @@
 Write-Host "1. Compiling PCF with build mode"
 
 Push-Location "..\pcf-fluentui-addresscomplete"
-& npm run dist
+& npm run build
 Rename-Item -Path "out\controls\addresscomplete\bundle.js" -NewName "bbundle.js"
 Pop-Location
 
