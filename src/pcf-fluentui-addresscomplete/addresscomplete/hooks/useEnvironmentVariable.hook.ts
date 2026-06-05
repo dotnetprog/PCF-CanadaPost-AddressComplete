@@ -10,7 +10,7 @@ export const useEnvironmentVariable = (variableName: string) => {
                 variableName
             )
         },
-        staleTime:0,
-        cacheTime:0
+        staleTime: 0,
+        cacheTime: 0,
     })
 }

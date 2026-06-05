@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest>
-  <control namespace="fdn" constructor="addresscomplete" version="0.0.5" display-name-key="addresscomplete" description-key="addresscomplete description" control-type="virtual">
+  <control namespace="fdn" constructor="addresscomplete" version="0.0.7" display-name-key="addresscomplete" description-key="addresscomplete description" control-type="virtual">
     <external-service-usage enabled="false"/>
     <type-group name="text">
       <type>SingleLine.Text</type>

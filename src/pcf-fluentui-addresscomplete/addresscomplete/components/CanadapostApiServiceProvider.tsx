@@ -16,6 +16,7 @@ export const CanadapostApiServiceProvider: React.FC<
     children,
     environmentVariableName,
 }: CanadapostApiServiceProviderProps) => {
+    const service = usePowerAppsServiceContext()
     const { data, isLoading, error, isError } = useEnvironmentVariable(
         environmentVariableName
     )
@@ -31,7 +32,7 @@ export const CanadapostApiServiceProvider: React.FC<
             />
         )
     }
-    const service = usePowerAppsServiceContext()
+
     const addressService = service.addressServiceFactory(data)
     return (
         <CanadaPostServiceContext.Provider value={addressService}>
