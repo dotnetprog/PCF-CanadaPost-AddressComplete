@@ -34,7 +34,6 @@ const useStyles = makeStyles({
     inline: {
         display: 'flex',
         alignItems: 'center',
-        gap: '16px',
     },
     comboWrapper: {
         flex: 1,

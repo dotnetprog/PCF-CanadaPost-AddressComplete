@@ -13,36 +13,27 @@ export interface IAppProps {
     instanceid: string
 }
 
-export class App extends React.Component<IAppProps> {
-    public render(): React.ReactNode {
-        const queryClient = new QueryClient()
-        return (
-            <QueryClientProvider client={queryClient}>
-                <IdPrefixProvider
-                    value={`addresscomplete-${this.props.instanceid}`}>
-                    <PowerAppsServiceContextProvider
-                        Service={this.props.contextService}>
-                        <FluentProvider
-                            style={{ width: '100%' }}
-                            theme={this.props.contextService.theme}>
-                            <CanadapostApiServiceProvider
-                                environmentVariableName={
-                                    this.props.contextService.apiKeyVarName
-                                }>
-                                <AddressCompleteSearchField
-                                    placeholderTerm={
-                                        this.props.contextService
-                                            .placeholderTerm
-                                    }
-                                    onSelectedAddress={
-                                        this.props.contextService.onChange
-                                    }
-                                />
-                            </CanadapostApiServiceProvider>
-                        </FluentProvider>
-                    </PowerAppsServiceContextProvider>
-                </IdPrefixProvider>
-            </QueryClientProvider>
-        )
-    }
+export const App: React.FC<IAppProps> = ({ contextService, instanceid }) => {
+    const queryClient = new QueryClient()
+    return (
+        <QueryClientProvider client={queryClient}>
+            <IdPrefixProvider value={`addresscomplete-${instanceid}`}>
+                <PowerAppsServiceContextProvider Service={contextService}>
+                    <FluentProvider
+                        style={{ width: '100%' }}
+                        theme={contextService.theme}>
+                        <CanadapostApiServiceProvider
+                            environmentVariableName={
+                                contextService.apiKeyVarName
+                            }>
+                            <AddressCompleteSearchField
+                                placeholderTerm={contextService.placeholderTerm}
+                                onSelectedAddress={contextService.onChange}
+                            />
+                        </CanadapostApiServiceProvider>
+                    </FluentProvider>
+                </PowerAppsServiceContextProvider>
+            </IdPrefixProvider>
+        </QueryClientProvider>
+    )
 }

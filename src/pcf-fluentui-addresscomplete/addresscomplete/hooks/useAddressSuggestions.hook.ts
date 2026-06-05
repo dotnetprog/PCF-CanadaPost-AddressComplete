@@ -33,7 +33,7 @@ export function useAddressSuggestions(
             const result = await service.retrieve(queryInput, queryCountry)
             return result
         },
-        staleTime:0,
-        cacheTime:0
+        staleTime: 0,
+        cacheTime: 0,
     })
 }

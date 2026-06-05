@@ -89,7 +89,9 @@ export const SuggestionOption: React.FC<ISuggestionOptionProps> = ({
                 <small className={styles.description}>{item.Description}</small>
             )}
             {item.Next === 'Find' && (
-                <ChevronRightRegular style={{ verticalAlign: 'middle', float: 'right' }} />
+                <ChevronRightRegular
+                    style={{ verticalAlign: 'middle', float: 'right' }}
+                />
             )}
         </div>
     )

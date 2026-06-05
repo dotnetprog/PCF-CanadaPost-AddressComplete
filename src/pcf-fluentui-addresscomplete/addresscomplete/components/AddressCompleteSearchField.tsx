@@ -1,23 +1,23 @@
-import { addressDetailData } from '../model/addressDetailData'
 import * as React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { makeStyles, Portal, useId } from '@fluentui/react-components'
 import { SearchRegular } from '@fluentui/react-icons/svg/search'
-import { DismissRegular } from '@fluentui/react-icons/svg/dismiss'
-import { useCountrySelectors } from '../hooks/useCountrySelectors.hook'
-import { Country } from '../services/CountryManager'
+import { addressDetailData } from '../model/addressDetailData'
 import { addressSuggestionData } from '../model/addressSuggestionData'
+import { Country } from '../services/CountryManager'
+import { useCountrySelectors } from '../hooks/useCountrySelectors.hook'
 import { useAddressSuggestions } from '../hooks/useAddressSuggestions.hook'
-import {
-    Button,
-    ButtonProps,
-    makeStyles,
-    Portal,
-    useId,
-} from '@fluentui/react-components'
+import { useClickOutside } from '../hooks/useClickOutside.hook'
+import { useDropdownPosition } from '../hooks/useDropdownPosition.hook'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation.hook'
+import { useCanadaPostService } from './CanadapostApiServiceProvider'
+import { ClearButton } from './ClearButton'
 import { CountryListComboBox } from './CountryListComboBox'
 import { CustomTextbox } from './CustomTextbox'
 import { SuggestionOption } from './SuggestionOption'
-import { useCanadaPostService } from './CanadapostApiServiceProvider'
+
+// --- Styles
+
 const useStyles = makeStyles({
     root: {
         position: 'relative',
@@ -54,48 +54,94 @@ const useStyles = makeStyles({
         backgroundColor: 'rgba(0,120,212,0.08)',
     },
 })
-const ClearButton: React.FC<ButtonProps> = (props) => {
-    return (
-        <Button
-            {...props}
-            appearance="transparent"
-            size="small"
-            icon={<DismissRegular />}></Button>
-    )
-}
+
+// --- Types
+
 export interface IAddressCompleteSearchFieldProps {
     placeholderTerm: string
     onSelectedAddress: (selectedAddress?: addressDetailData) => void
 }
 
+// --- Component
+
 export const AddressCompleteSearchField: React.FC<
     IAddressCompleteSearchFieldProps
 > = ({ placeholderTerm, onSelectedAddress }) => {
-    const { defaultCountry } = useCountrySelectors()
+    const classes = useStyles()
+    const id = useId()
+
+    // --- Services & selectors
+
     const addressService = useCanadaPostService()
+    const { defaultCountry } = useCountrySelectors()
+
+    // --- State & refs
+
     const [query, setQuery] = useState<string | undefined>('')
     const [country, setCountry] = useState<Country | undefined>(defaultCountry)
     const [selectedSuggestion, setSelectedSuggestion] = useState<
         addressSuggestionData | undefined
     >(undefined)
+    const [open, setOpen] = useState(false)
+
+    const wrapperRef = useRef<HTMLDivElement | null>(null)
+    const inputRef = useRef<HTMLInputElement | null>(null)
+    const dropdownRef = useRef<HTMLDivElement | null>(null)
+
+    // --- Handlers
+    // Declared before hooks that depend on them to avoid circular references.
+
+    const clearTextField = useCallback(() => {
+        setQuery('')
+        setSelectedSuggestion(undefined)
+    }, [])
+
+    // activeIndex is reset to -1 by the open/close effect below whenever
+    // query or suggestions change, so it does not need to be reset here.
+    const select = useCallback((value: addressSuggestionData) => {
+        setQuery(value.Text)
+        setSelectedSuggestion(value)
+        inputRef.current?.focus()
+    }, [])
+
+    // --- Derived values
+
     const { data: suggestions } = useAddressSuggestions(
         query,
         country?.ISOCode,
         selectedSuggestion
     )
     const suggestionCount = suggestions?.length ?? 0
-    const [open, setOpen] = useState(false)
-    const [activeIndex, setActiveIndex] = useState(-1)
-    const wrapperRef = useRef<HTMLDivElement | null>(null)
-    const inputRef = useRef<HTMLInputElement | null>(null)
-    const itemsRef = useRef<(HTMLDivElement | null)[]>([])
-    const dropdownRef = useRef<HTMLDivElement | null>(null)
-    const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({})
-    const id = useId()
+    const dropdownStyle = useDropdownPosition(inputRef, open)
+    const { activeIndex, setActiveIndex, handleKeyDown, itemsRef } =
+        useKeyboardNavigation({
+            open,
+            suggestions,
+            onClose: () => setOpen(false),
+            onSelect: select,
+        })
+
+    // --- Effects
+
+    useClickOutside([wrapperRef, dropdownRef], () => setOpen(false))
+
+    // Open/close dropdown based on query and suggestion results.
+    // Also resets activeIndex to -1 after every selection or query change.
     useEffect(() => {
-        if (!selectedSuggestion || selectedSuggestion.Next !== 'Retrieve') {
+        if (!query) {
+            setOpen(false)
+            setActiveIndex(-1)
             return
         }
+        setOpen(suggestionCount > 0)
+        setActiveIndex(-1)
+    }, [query, suggestions])
+
+    // Retrieve full address detail when a final suggestion is selected
+    useEffect(() => {
+        if (!selectedSuggestion || selectedSuggestion.Next !== 'Retrieve')
+            return
+
         const doRetrieve = async () => {
             const detail = await addressService.retrieveAddressDetail(
                 selectedSuggestion.Id
@@ -104,93 +150,10 @@ export const AddressCompleteSearchField: React.FC<
             clearTextField()
         }
         doRetrieve()
-    }, [selectedSuggestion])
-    useEffect(() => {
-        if (!query) {
-            setOpen(false)
-            setActiveIndex(-1)
-            return
-        }
+    }, [selectedSuggestion, addressService, onSelectedAddress, clearTextField])
 
-        setOpen(suggestionCount > 0)
-        setActiveIndex(-1)
-    }, [query, suggestions])
-    const clearTextField = React.useCallback(() => {
-        setQuery('')
-        setSelectedSuggestion(undefined)
-    }, [])
-    useEffect(() => {
-        function handleClickOutside(e: MouseEvent) {
-            const target = e.target as Node
-            const clickedInsideWrapper = wrapperRef.current?.contains(target)
-            const clickedInsideDropdown = dropdownRef.current?.contains(target)
-            if (!clickedInsideWrapper && !clickedInsideDropdown) {
-                setOpen(false)
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside)
-        return () =>
-            document.removeEventListener('mousedown', handleClickOutside)
-    }, [])
-    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (!open) return
-        console.log(e.key)
-        if (e.key === 'ArrowDown') {
-            e.preventDefault()
-            setActiveIndex((i) => Math.min(i + 1, suggestionCount - 1))
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault()
-            setActiveIndex((i) => Math.max(i - 1, 0))
-        } else if (e.key === 'Enter') {
-            e.preventDefault()
-            if (activeIndex >= 0 && activeIndex < suggestionCount) {
-                select(suggestions![activeIndex])
-            }
-        } else if (e.key === 'Escape') {
-            setOpen(false)
-        }
-    }
-    function select(value: addressSuggestionData) {
-        setQuery(value.Text)
-        setSelectedSuggestion(value)
-        setActiveIndex(-1)
-        // move focus back to input
-        inputRef.current?.focus()
-    }
-    // keep the active item visible when navigating
-    useEffect(() => {
-        if (activeIndex >= 0) {
-            const el = itemsRef.current[activeIndex]
-            if (el && typeof el.scrollIntoView === 'function') {
-                el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-            }
-        }
-    }, [activeIndex])
-    // compute and set dropdown position when open or input moves/resizes
-    useEffect(() => {
-        if (!open) return
+    // --- Render
 
-        function updatePosition() {
-            const el = inputRef.current
-            if (!el) return
-            const rect = el.getBoundingClientRect()
-            setDropdownStyle({
-                position: 'absolute',
-                top: rect.bottom + window.scrollY,
-                left: rect.left + window.scrollX,
-                width: rect.width,
-            })
-        }
-
-        updatePosition()
-        window.addEventListener('resize', updatePosition)
-        window.addEventListener('scroll', updatePosition, true)
-        return () => {
-            window.removeEventListener('resize', updatePosition)
-            window.removeEventListener('scroll', updatePosition, true)
-        }
-    }, [open, suggestions])
-    const classes = useStyles()
     return (
         <div ref={wrapperRef} className={classes.root}>
             <CountryListComboBox
